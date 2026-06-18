@@ -56,9 +56,9 @@ A full-stack MERN-based Volunteer Management System designed to streamline volun
 
 ![Volunteer Management](./screenshots/ss3.png)
 
-### Volunteer Details
+### Event Details
 
-![Volunteer Details](./screenshots/ss4.png)
+![Event Details](./screenshots/ss4.png)
 
 ### Profile
 
