@@ -37,9 +37,11 @@ A full-stack MERN-based Volunteer Management System designed to streamline volun
 ## Screenshots
 
 ### Login Page
+
 ![Login](./screenshots/ssL.png)
 
 ### Registration Page
+
 ![Register](./screenshots/ssR.png)
 
 ### Admin Dashboard
@@ -54,10 +56,9 @@ A full-stack MERN-based Volunteer Management System designed to streamline volun
 
 ![Volunteer Management](./screenshots/ss3.png)
 
-### Event Details
+### Volunteer Details
 
-![Event Details](./screenshots/ss4.png)
-
+![Volunteer Details](./screenshots/ss4.png)
 
 ### Profile
 
@@ -100,43 +101,88 @@ A full-stack MERN-based Volunteer Management System designed to streamline volun
 
 ---
 
+## Installation
+
+### Clone Repository
+
+```bash
+git clone https://github.com/kumarhitesh1/VMS.git
+cd VMS
+```
+
+### Backend Setup
+
+```bash
+cd backend
+npm install
+```
+
+Create a `.env` file inside the backend directory:
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+DB_NAME=your_database_name
+JWT_SECRET=your_secret_key
+CLIENT_URL=http://localhost:5173
+```
+
+Run the backend server:
+
+```bash
+npm run dev
+```
+
+### Frontend Setup
+
+Open a new terminal:
+
+```bash
+cd frontend
+npm install
+```
+
+Create a `.env` file inside the frontend directory:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+Run the frontend application:
+
+```bash
+npm run dev
+```
+
+---
+
+## Architecture
+
+```text
+Frontend (React + Vite)
+        │
+        ▼
+REST API (Express.js)
+        │
+        ▼
+MongoDB Database
+```
+
+---
+
 ## Project Structure
 
 ```text
 Volunteer-Management-System
 │
 ├── frontend
-│   │
-│   ├── public
-│   │
 │   ├── src
-│   │   │
 │   │   ├── components
-│   │   │   ├── DashboardCharts.jsx
-│   │   │   ├── Navbar.jsx
-│   │   │   └── Sidebar.jsx
-│   │   │
 │   │   ├── context
-│   │   │   └── AuthContext.jsx
-│   │   │
 │   │   ├── layouts
-│   │   │   └── DashboardLayout.jsx
-│   │   │
 │   │   ├── pages
-│   │   │   ├── AdminDashboard.jsx
-│   │   │   ├── Events.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Profile.jsx
-│   │   │   ├── Register.jsx
-│   │   │   ├── VolunteerDetails.jsx
-│   │   │   └── Volunteers.jsx
-│   │   │
 │   │   ├── routes
-│   │   │   └── ProtectedRoute.jsx
-│   │   │
 │   │   ├── services
-│   │   │   └── api.js
-│   │   │
 │   │   ├── App.jsx
 │   │   └── main.jsx
 │   │
@@ -144,48 +190,19 @@ Volunteer-Management-System
 │   └── vite.config.js
 │
 ├── backend
-│   │
 │   ├── config
-│   │   └── db.js
-│   │
 │   ├── controllers
-│   │   ├── authController.js
-│   │   ├── dashboardController.js
-│   │   ├── eventController.js
-│   │   └── volunteerController.js
-│   │
 │   ├── middleware
-│   │   ├── authMiddleware.js
-│   │   ├── roleMiddleware.js
-│   │   └── errorHandler.js
-│   │
 │   ├── models
-│   │   ├── User.js
-│   │   └── Event.js
-│   │
 │   ├── routes
-│   │   ├── authRoutes.js
-│   │   ├── dashboardRoutes.js
-│   │   ├── eventRoutes.js
-│   │   └── volunteerRoutes.js
-│   │
 │   ├── utils
-│   │   ├── AppError.js
-│   │   └── generateToken.js
-│   │
 │   ├── index.js
 │   └── package.json
 │
 ├── screenshots
-│   ├── ss1.png
-│   ├── ss2.png
-│   ├── ss3.png
-│   ├── ss4.png
-│   ├── ss5.png
-│   ├── ssL.png
-│   └── ssR.png
 │
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
 ---
@@ -194,9 +211,7 @@ Volunteer-Management-System
 
 The system uses JWT-based authentication and role-based authorization.
 
-### Roles
-
-#### Admin
+### Admin
 
 * Access Dashboard
 * Manage Volunteers
@@ -204,7 +219,7 @@ The system uses JWT-based authentication and role-based authorization.
 * Manage Events
 * Access Analytics
 
-#### Volunteer
+### Volunteer
 
 * View Events
 * Access Profile
@@ -303,6 +318,21 @@ Stores:
 
 ---
 
+## Future Enhancements
+
+* Event Registration & Participation Tracking
+* Volunteer Attendance Tracking
+* Event Assignment System
+* Email Notifications
+* Search & Filter Functionality
+* Event Editing Interface
+* Export Reports
+* Enhanced Dashboard Insights
+
+---
+
 ## Conclusion
 
 The Volunteer Management System provides a centralized solution for managing volunteers and events. Through secure authentication, role-based access control, analytics dashboards, and organized volunteer management, the platform improves operational efficiency and simplifies event coordination for organizations.
+
+---
