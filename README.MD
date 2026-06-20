@@ -158,8 +158,8 @@ A volunteer's view of upcoming events with a Join action.
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
-cd <your-repo-name>
+git clone https://github.com/kumarhitesh1/VMS.git
+cd VMS
 ```
 
 ### 2. Backend setup
