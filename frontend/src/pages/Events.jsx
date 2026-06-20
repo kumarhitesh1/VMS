@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FaCalendarAlt } from "react-icons/fa";
 import DashboardLayout from "../layouts/DashboardLayout";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
@@ -9,6 +10,7 @@ function Events() {
 
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [actionId, setActionId] = useState(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -87,17 +89,76 @@ function Events() {
     }
   };
 
+  const isJoined = (event) =>
+    event.volunteers?.some(
+      (volunteer) => volunteer._id === user?._id || volunteer === user?._id
+    );
+
+  const joinEvent = async (id) => {
+    try {
+      setActionId(id);
+      const res = await api.post(`/events/${id}/join`);
+
+      setEvents((prev) =>
+        prev.map((event) =>
+          event._id === id ? res.data.event : event
+        )
+      );
+    } catch (error) {
+      console.log(error);
+      alert(
+        error.response?.data?.message || "Failed to join event"
+      );
+    } finally {
+      setActionId(null);
+    }
+  };
+
+  const leaveEvent = async (id) => {
+    try {
+      setActionId(id);
+      const res = await api.post(`/events/${id}/leave`);
+
+      setEvents((prev) =>
+        prev.map((event) =>
+          event._id === id ? res.data.event : event
+        )
+      );
+    } catch (error) {
+      console.log(error);
+      alert(
+        error.response?.data?.message || "Failed to leave event"
+      );
+    } finally {
+      setActionId(null);
+    }
+  };
+
+  const statusStyles = {
+    Upcoming: "bg-amber-50 text-amber-700",
+    Ongoing: "bg-indigo-50 text-indigo-700",
+    Completed: "bg-emerald-50 text-emerald-700",
+  };
+
+  const inputClass =
+    "border border-slate-300 p-3 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition";
+
   return (
     <DashboardLayout>
-      <h1 className="text-3xl font-bold mb-6">
-        Event Management
-      </h1>
-
-      {/* Create Event Form - admins only, since the backend rejects this from volunteers anyway */}
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+          Event Management
+        </h1>
+        <p className="text-sm text-slate-500 mt-1">
+          {isAdmin
+            ? "Create events and manage who's signed up."
+            : "Browse events and join the ones you'd like to help with."}
+        </p>
+      </div>
 
       {isAdmin && (
-        <div className="bg-white p-6 rounded-lg shadow mb-8">
-          <h2 className="text-xl font-semibold mb-4">
+        <div className="bg-white rounded-xl border border-slate-200 p-6 mb-8">
+          <h2 className="text-base font-semibold text-slate-900 mb-4">
             Create Event
           </h2>
 
@@ -111,7 +172,7 @@ function Events() {
               placeholder="Event Title"
               value={formData.title}
               onChange={handleChange}
-              className="border p-3 rounded"
+              className={inputClass}
               required
             />
 
@@ -121,7 +182,7 @@ function Events() {
               placeholder="Category"
               value={formData.category}
               onChange={handleChange}
-              className="border p-3 rounded"
+              className={inputClass}
               required
             />
 
@@ -130,7 +191,7 @@ function Events() {
               name="date"
               value={formData.date}
               onChange={handleChange}
-              className="border p-3 rounded"
+              className={inputClass}
               required
             />
 
@@ -140,7 +201,7 @@ function Events() {
               placeholder="Location"
               value={formData.location}
               onChange={handleChange}
-              className="border p-3 rounded"
+              className={inputClass}
               required
             />
 
@@ -150,7 +211,7 @@ function Events() {
               placeholder="Required Volunteers"
               value={formData.requiredVolunteers}
               onChange={handleChange}
-              className="border p-3 rounded"
+              className={inputClass}
               required
             />
 
@@ -159,14 +220,14 @@ function Events() {
               placeholder="Description"
               value={formData.description}
               onChange={handleChange}
-              className="border p-3 rounded md:col-span-2"
+              className={`${inputClass} md:col-span-2`}
               rows="4"
               required
             />
 
             <button
               type="submit"
-              className="bg-slate-900 text-white py-3 rounded"
+              className="md:col-span-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-3 rounded-lg transition-colors"
             >
               Create Event
             </button>
@@ -174,63 +235,132 @@ function Events() {
         </div>
       )}
 
-      {/* Events Table */}
-
       {loading ? (
-        <p>Loading events...</p>
+        <div className="bg-white rounded-xl border border-slate-200 p-10 text-center text-sm text-slate-500">
+          Loading events...
+        </div>
+      ) : events.length === 0 ? (
+        <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
+          <FaCalendarAlt className="mx-auto text-3xl text-slate-300 mb-3" />
+          <p className="text-sm font-medium text-slate-700">
+            No events yet
+          </p>
+          <p className="text-sm text-slate-500 mt-1">
+            {isAdmin
+              ? "Create your first event using the form above."
+              : "Check back soon for upcoming events."}
+          </p>
+        </div>
       ) : (
-        <div className="bg-white rounded-lg shadow overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-slate-900 text-white">
-              <tr>
-                <th className="p-3 text-left">Title</th>
-                <th className="p-3 text-left">Date</th>
-                <th className="p-3 text-left">Location</th>
-                <th className="p-3 text-left">Status</th>
-                {isAdmin && (
-                  <th className="p-3 text-left">Actions</th>
-                )}
+        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="px-5 py-3 text-left font-semibold text-slate-600">Title</th>
+                <th className="px-5 py-3 text-left font-semibold text-slate-600">Date</th>
+                <th className="px-5 py-3 text-left font-semibold text-slate-600">Location</th>
+                <th className="px-5 py-3 text-left font-semibold text-slate-600">Status</th>
+                <th className="px-5 py-3 text-left font-semibold text-slate-600">Volunteers</th>
+                <th className="px-5 py-3 text-left font-semibold text-slate-600">Actions</th>
               </tr>
             </thead>
 
             <tbody>
-              {events.map((event) => (
-                <tr
-                  key={event._id}
-                  className="border-b"
-                >
-                  <td className="p-3">
-                    {event.title}
-                  </td>
+              {events.map((event) => {
+                const joined = isJoined(event);
+                const filled = event.volunteers?.length || 0;
+                const isFull = filled >= event.requiredVolunteers;
+                const fillPct = Math.min(
+                  100,
+                  Math.round((filled / event.requiredVolunteers) * 100) || 0
+                );
 
-                  <td className="p-3">
-                    {new Date(
-                      event.date
-                    ).toLocaleDateString()}
-                  </td>
-
-                  <td className="p-3">
-                    {event.location}
-                  </td>
-
-                  <td className="p-3">
-                    {event.status}
-                  </td>
-
-                  {isAdmin && (
-                    <td className="p-3">
-                      <button
-                        onClick={() =>
-                          deleteEvent(event._id)
-                        }
-                        className="bg-red-500 text-white px-3 py-1 rounded"
-                      >
-                        Delete
-                      </button>
+                return (
+                  <tr
+                    key={event._id}
+                    className="border-b border-slate-100 last:border-0 hover:bg-slate-50/60 transition-colors"
+                  >
+                    <td className="px-5 py-3.5 font-medium text-slate-900">
+                      {event.title}
                     </td>
-                  )}
-                </tr>
-              ))}
+
+                    <td className="px-5 py-3.5 text-slate-600">
+                      {new Date(
+                        event.date
+                      ).toLocaleDateString()}
+                    </td>
+
+                    <td className="px-5 py-3.5 text-slate-600">
+                      {event.location}
+                    </td>
+
+                    <td className="px-5 py-3.5">
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                          statusStyles[event.status] || "bg-slate-100 text-slate-600"
+                        }`}
+                      >
+                        {event.status}
+                      </span>
+                    </td>
+
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-2 w-32">
+                        <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${
+                              isFull ? "bg-emerald-500" : "bg-indigo-500"
+                            }`}
+                            style={{ width: `${fillPct}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-slate-500 whitespace-nowrap">
+                          {filled}/{event.requiredVolunteers}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td className="px-5 py-3.5">
+                      {isAdmin && (
+                        <button
+                          onClick={() =>
+                            deleteEvent(event._id)
+                          }
+                          className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                        >
+                          Delete
+                        </button>
+                      )}
+
+                      {!isAdmin && (
+                        joined ? (
+                          <button
+                            onClick={() => leaveEvent(event._id)}
+                            disabled={actionId === event._id}
+                            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors disabled:opacity-50"
+                          >
+                            {actionId === event._id
+                              ? "Leaving..."
+                              : "Leave"}
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => joinEvent(event._id)}
+                            disabled={actionId === event._id || isFull}
+                            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {isFull
+                              ? "Full"
+                              : actionId === event._id
+                              ? "Joining..."
+                              : "Join"}
+                          </button>
+                        )
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

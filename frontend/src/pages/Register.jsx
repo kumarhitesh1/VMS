@@ -54,132 +54,173 @@ function Register() {
     }
   };
 
+  const inputClass =
+    "w-full border border-slate-300 p-3 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition";
+
+  const labelClass = "block text-sm font-medium text-slate-700 mb-1.5";
+
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center py-10">
+    <div className="min-h-screen bg-slate-50 flex justify-center items-center py-10 px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl"
+        className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 w-full max-w-2xl"
       >
-        <h1 className="text-3xl font-bold mb-6 text-center">
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight text-center">
           Volunteer Registration
         </h1>
+        <p className="text-sm text-slate-500 text-center mt-1 mb-6">
+          Tell us a bit about yourself to get started
+        </p>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            onChange={handleChange}
-            className="border p-3 rounded"
-            required
-          />
+          <div>
+            <label className={labelClass}>Name</label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Full name"
+              onChange={handleChange}
+              className={inputClass}
+              required
+            />
+          </div>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-            className="border p-3 rounded"
-            required
-          />
+          <div>
+            <label className={labelClass}>Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              onChange={handleChange}
+              className={inputClass}
+              required
+            />
+          </div>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-            className="border p-3 rounded"
-            required
-          />
+          <div>
+            <label className={labelClass}>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              onChange={handleChange}
+              className={inputClass}
+              required
+            />
+          </div>
 
-          <input
-            type="text"
-            name="phone"
-            placeholder="Phone"
-            onChange={handleChange}
-            className="border p-3 rounded"
-            required
-          />
+          <div>
+            <label className={labelClass}>Phone</label>
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone number"
+              onChange={handleChange}
+              className={inputClass}
+              required
+            />
+          </div>
 
-          <input
-            type="number"
-            name="age"
-            placeholder="Age"
-            onChange={handleChange}
-            className="border p-3 rounded"
-            required
-          />
+          <div>
+            <label className={labelClass}>Age</label>
+            <input
+              type="number"
+              name="age"
+              placeholder="Age"
+              onChange={handleChange}
+              className={inputClass}
+              required
+            />
+          </div>
 
-          <select
-            name="gender"
-            onChange={handleChange}
-            className="border p-3 rounded"
-          >
-            <option>Male</option>
-            <option>Female</option>
-            <option>Other</option>
-          </select>
+          <div>
+            <label className={labelClass}>Gender</label>
+            <select
+              name="gender"
+              onChange={handleChange}
+              className={inputClass}
+            >
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
 
-          <input
-            type="text"
-            name="address"
-            placeholder="Address"
-            onChange={handleChange}
-            className="border p-3 rounded col-span-2"
-            required
-          />
+          <div className="md:col-span-2">
+            <label className={labelClass}>Address</label>
+            <input
+              type="text"
+              name="address"
+              placeholder="Address"
+              onChange={handleChange}
+              className={inputClass}
+              required
+            />
+          </div>
 
-          <input
-            type="text"
-            name="skills"
-            placeholder="Skills (comma separated)"
-            onChange={handleChange}
-            className="border p-3 rounded"
-          />
+          <div>
+            <label className={labelClass}>Skills</label>
+            <input
+              type="text"
+              name="skills"
+              placeholder="e.g. First Aid, Driving"
+              onChange={handleChange}
+              className={inputClass}
+            />
+          </div>
 
-          <select
-            name="availability"
-            onChange={handleChange}
-            className="border p-3 rounded"
-          >
-            <option>Weekdays</option>
-            <option>Weekends</option>
-            <option>Anytime</option>
-          </select>
+          <div>
+            <label className={labelClass}>Availability</label>
+            <select
+              name="availability"
+              onChange={handleChange}
+              className={inputClass}
+            >
+              <option>Weekdays</option>
+              <option>Weekends</option>
+              <option>Anytime</option>
+            </select>
+          </div>
 
-          <input
-            type="text"
-            name="emergencyContactName"
-            placeholder="Emergency Contact Name"
-            onChange={handleChange}
-            className="border p-3 rounded"
-            required
-          />
+          <div>
+            <label className={labelClass}>Emergency Contact Name</label>
+            <input
+              type="text"
+              name="emergencyContactName"
+              placeholder="Contact name"
+              onChange={handleChange}
+              className={inputClass}
+              required
+            />
+          </div>
 
-          <input
-            type="text"
-            name="emergencyContactPhone"
-            placeholder="Emergency Contact Phone"
-            onChange={handleChange}
-            className="border p-3 rounded"
-            required
-          />
+          <div>
+            <label className={labelClass}>Emergency Contact Phone</label>
+            <input
+              type="text"
+              name="emergencyContactPhone"
+              placeholder="Contact phone"
+              onChange={handleChange}
+              className={inputClass}
+              required
+            />
+          </div>
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-slate-900 text-white py-3 rounded mt-6"
+          className="w-full bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-3 rounded-lg mt-6 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {loading ? "Registering..." : "Register"}
         </button>
 
-        <p className="text-center mt-4">
+        <p className="text-center text-sm text-slate-500 mt-5">
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-blue-600"
+            className="text-indigo-600 font-medium hover:text-indigo-700"
           >
             Login
           </Link>

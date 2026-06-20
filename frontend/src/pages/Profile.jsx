@@ -24,84 +24,53 @@ function Profile() {
   if (loading) {
     return (
       <DashboardLayout>
-        <p>Loading profile...</p>
+        <div className="bg-white rounded-xl border border-slate-200 p-10 text-center text-sm text-slate-500">
+          Loading profile...
+        </div>
       </DashboardLayout>
     );
   }
 
+  const fields = [
+    { label: "Name", value: user?.name },
+    { label: "Email", value: user?.email },
+    { label: "Phone", value: user?.phone },
+    { label: "Role", value: user?.role, capitalize: true },
+    { label: "Age", value: user?.age },
+    { label: "Gender", value: user?.gender },
+    { label: "Address", value: user?.address, span: true },
+    { label: "Skills", value: user?.skills?.join(", ") || "—", span: true },
+    { label: "Emergency Contact", value: user?.emergencyContactName },
+    { label: "Emergency Phone", value: user?.emergencyContactPhone },
+  ];
+
   return (
     <DashboardLayout>
-      <h1 className="text-3xl font-bold mb-6">
-        My Profile
-      </h1>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+          My Profile
+        </h1>
+        <p className="text-sm text-slate-500 mt-1">
+          Your registered information on file.
+        </p>
+      </div>
 
-      <div className="bg-white rounded-lg shadow p-6">
+      <div className="bg-white rounded-xl border border-slate-200 p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-          <div>
-            <p className="text-gray-500">Name</p>
-            <p className="font-semibold">{user?.name}</p>
-          </div>
-
-          <div>
-            <p className="text-gray-500">Email</p>
-            <p className="font-semibold">{user?.email}</p>
-          </div>
-
-          <div>
-            <p className="text-gray-500">Phone</p>
-            <p className="font-semibold">{user?.phone}</p>
-          </div>
-
-          <div>
-            <p className="text-gray-500">Role</p>
-            <p className="font-semibold capitalize">
-              {user?.role}
-            </p>
-          </div>
-
-          <div>
-            <p className="text-gray-500">Age</p>
-            <p className="font-semibold">{user?.age}</p>
-          </div>
-
-          <div>
-            <p className="text-gray-500">Gender</p>
-            <p className="font-semibold">{user?.gender}</p>
-          </div>
-
-          <div className="md:col-span-2">
-            <p className="text-gray-500">Address</p>
-            <p className="font-semibold">
-              {user?.address}
-            </p>
-          </div>
-
-          <div className="md:col-span-2">
-            <p className="text-gray-500">Skills</p>
-            <p className="font-semibold">
-              {user?.skills?.join(", ")}
-            </p>
-          </div>
-
-          <div>
-            <p className="text-gray-500">
-              Emergency Contact
-            </p>
-            <p className="font-semibold">
-              {user?.emergencyContactName}
-            </p>
-          </div>
-
-          <div>
-            <p className="text-gray-500">
-              Emergency Phone
-            </p>
-            <p className="font-semibold">
-              {user?.emergencyContactPhone}
-            </p>
-          </div>
-
+          {fields.map((field) => (
+            <div key={field.label} className={field.span ? "md:col-span-2" : ""}>
+              <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">
+                {field.label}
+              </p>
+              <p
+                className={`text-sm font-medium text-slate-900 ${
+                  field.capitalize ? "capitalize" : ""
+                }`}
+              >
+                {field.value || "—"}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </DashboardLayout>

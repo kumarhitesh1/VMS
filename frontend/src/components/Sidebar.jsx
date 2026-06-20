@@ -44,34 +44,46 @@ function Sidebar() {
   };
 
   return (
-    <aside className="w-64 bg-slate-900 text-white min-h-screen">
-      <div className="p-6 border-b border-slate-700">
-        <h1 className="text-xl font-bold">
+    <aside className="w-64 bg-slate-900 text-white min-h-screen flex flex-col">
+      <div className="px-6 py-6 border-b border-slate-800">
+        <h1 className="text-lg font-semibold tracking-tight">
           Volunteer System
         </h1>
+        {user?.role === "admin" && (
+          <span className="mt-1 inline-block text-xs font-medium text-indigo-300 bg-indigo-500/10 px-2 py-0.5 rounded">
+            Admin
+          </span>
+        )}
       </div>
 
-      <nav className="p-4 space-y-2">
-        {menuItems.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={`flex items-center gap-3 p-3 rounded-lg transition ${
-              location.pathname === item.path
-                ? "bg-slate-700"
-                : "hover:bg-slate-800"
-            }`}
-          >
-            {item.icon}
-            {item.name}
-          </Link>
-        ))}
+      <nav className="p-3 space-y-1 flex-1">
+        {menuItems.map((item) => {
+          const isActive = location.pathname === item.path;
+
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`relative flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                isActive
+                  ? "bg-slate-800 text-white"
+                  : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-100"
+              }`}
+            >
+              {isActive && (
+                <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-full bg-indigo-500" />
+              )}
+              <span className="text-base">{item.icon}</span>
+              {item.name}
+            </Link>
+          );
+        })}
       </nav>
 
-      <div className="p-4">
+      <div className="p-3 border-t border-slate-800">
         <button
           onClick={handleLogout}
-          className="w-full bg-red-500 hover:bg-red-600 py-2 rounded-lg flex items-center justify-center gap-2"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-red-500/10 hover:text-red-400 transition-colors"
         >
           <FaSignOutAlt />
           Logout

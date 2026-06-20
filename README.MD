@@ -1,338 +1,248 @@
 # Volunteer Management System
 
-A full-stack MERN-based Volunteer Management System designed to streamline volunteer registration, event management, and administrative operations through a secure role-based platform. The system enables administrators to manage volunteers and events while allowing volunteers to register, access events, and maintain their profiles.
-
----
-
-## Features
-
-### Admin Features
-
-* Secure Admin Authentication
-* Dashboard with Analytics
-* View Total Volunteers
-* View Total Events
-* Track Upcoming Events
-* Track Completed Events
-* Create Events
-* View All Events
-* Delete Events
-* View All Volunteers
-* View Volunteer Details
-* Delete Volunteers
-* Role-Based Access Control
-* Visual Statistics using Charts
-
-### Volunteer Features
-
-* Volunteer Registration
-* Secure Login
-* View Available Events
-* Access Personal Profile
-* Update Profile Information
-* Secure Logout
-
----
-
-## Screenshots
-
-### Login Page
-
-![Login](./screenshots/ssL.png)
-
-### Registration Page
-
-![Register](./screenshots/ssR.png)
-
-### Admin Dashboard
-
-![Admin Dashboard](./screenshots/ss1.png)
-
-### Event Management
-
-![Event Management](./screenshots/ss2.png)
-
-### Volunteer Management
-
-![Volunteer Management](./screenshots/ss3.png)
-
-### Event Details
-
-![Event Details](./screenshots/ss4.png)
-
-### Profile
-
-![Profile](./screenshots/ss5.png)
-
----
+A MERN app for running a volunteer program — admins create events and manage volunteers, volunteers sign up and join events they want to help with.
 
 ## Tech Stack
 
-### Frontend
+**Frontend**
+- React 19 + Vite
+- React Router
+- Tailwind CSS v4
+- Axios
+- Recharts (dashboard charts)
+- React Icons
 
-| Technology        | Purpose                         |
-| ----------------- | ------------------------------- |
-| React.js          | User Interface                  |
-| React Router DOM  | Client-Side Routing             |
-| Tailwind CSS      | Styling                         |
-| Axios             | API Communication               |
-| Recharts          | Dashboard Analytics             |
-| React Icons       | UI Icons                        |
-| React Context API | Authentication State Management |
-| Vite              | Frontend Build Tool             |
+**Backend**
+- Node.js + Express 5
+- MongoDB + Mongoose
+- JSON Web Tokens (JWT) for authentication
+- bcrypt for password hashing
 
-### Backend
+## Features
 
-| Technology | Purpose                         |
-| ---------- | ------------------------------- |
-| Node.js    | Runtime Environment             |
-| Express.js | REST API Development            |
-| JWT        | Authentication & Authorization  |
-| Bcrypt.js  | Password Hashing                |
-| CORS       | Cross-Origin Resource Sharing   |
-| Dotenv     | Environment Variable Management |
+- Register/login with two roles: `admin` and `volunteer`
+- Admin dashboard with volunteer/event counts and a couple of charts
+- Admins can view and delete volunteers, create and delete events
+- Volunteers can browse events and join/leave them
+- Admins can also manually assign or remove a volunteer from an event (from the volunteer's detail page)
+- Events show a fill bar for how many volunteers have joined vs how many are needed, and stop accepting joins once full
+- Everyone can see their own profile info
+- Protected routes on the frontend + JWT/role checks on the backend
 
-### Database
+## Screenshots
 
-| Technology | Purpose         |
-| ---------- | --------------- |
-| MongoDB    | NoSQL Database  |
-| Mongoose   | ODM for MongoDB |
+### Login
+Email/password login with a link to register.
 
----
+![Login](./screenshots/ss1.png)
 
-## Installation
+### Register
+Volunteer sign-up form capturing contact, skills, and emergency contact details.
 
-### Clone Repository
+![Register](./screenshots/ss2.png)
 
-```bash
-git clone https://github.com/kumarhitesh1/VMS.git
-cd VMS
+### Admin Dashboard
+Stat cards plus a system overview bar chart and event status donut chart.
+
+![Admin Dashboard](./screenshots/ss3.png)
+
+### Volunteers (Admin)
+List of registered volunteers with View and Delete actions.
+
+![Volunteers - Admin view](./screenshots/ss4.png)
+
+### Event Management (Admin)
+Create-event form and a table of existing events with status and capacity.
+
+![Event Management - Admin view](./screenshots/ss5.png)
+
+### Profile
+Same layout for both roles, just different data.
+
+![Profile - Admin view](./screenshots/ss6.png)
+![Profile - Volunteer view](./screenshots/ss8.png)
+
+### Events (Volunteer)
+A volunteer's view of upcoming events with a Join action.
+
+![Events - Volunteer view](./screenshots/ss7.png)
+
+## Project Structure
+
+```
+.
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   │   ├── DashboardCharts.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   └── Sidebar.jsx
+│   │   ├── context/
+│   │   │   └── AuthContext.jsx
+│   │   ├── layouts/
+│   │   │   └── DashboardLayout.jsx
+│   │   ├── pages/
+│   │   │   ├── AdminDashboard.jsx
+│   │   │   ├── Events.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Profile.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── VolunteerDetails.jsx
+│   │   │   └── Volunteers.jsx
+│   │   ├── routes/
+│   │   │   └── ProtectedRoute.jsx
+│   │   ├── services/
+│   │   │   └── api.js
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   └── main.jsx
+│   ├── .env
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── postcss.config.js
+│   └── vite.config.js
+│
+├── server/
+│   ├── config/
+│   │   └── db.js
+│   ├── controllers/
+│   │   ├── authController.js
+│   │   ├── dashboardController.js
+│   │   ├── eventController.js
+│   │   └── volunteerController.js
+│   ├── middleware/
+│   │   ├── authMiddleware.js
+│   │   ├── errorHandler.js
+│   │   └── roleMiddleware.js
+│   ├── models/
+│   │   ├── Event.js
+│   │   └── User.js
+│   ├── routes/
+│   │   ├── authRoutes.js
+│   │   ├── dashboardRoutes.js
+│   │   ├── eventRoutes.js
+│   │   └── volunteerRoutes.js
+│   ├── utils/
+│   │   ├── AppError.js
+│   │   └── generateToken.js
+│   ├── .env
+│   ├── index.js
+│   ├── package.json
+│   └── package-lock.json
+│
+├── screenshots/
+│   ├── ss1.png
+│   ├── ss2.png
+│   ├── ss3.png
+│   ├── ss4.png
+│   ├── ss5.png
+│   ├── ss6.png
+│   ├── ss7.png
+│   └── ss8.png
+│
+├── .gitignore
+├── LICENSE
+└── README.md
 ```
 
-### Backend Setup
+## Getting Started
+
+### Prerequisites
+- Node.js 18+
+- A MongoDB instance (local or [MongoDB Atlas](https://www.mongodb.com/atlas))
+
+### 1. Clone the repository
 
 ```bash
-cd backend
+git clone <your-repo-url>
+cd <your-repo-name>
+```
+
+### 2. Backend setup
+
+```bash
+cd server
 npm install
 ```
 
-Create a `.env` file inside the backend directory:
+Create a `.env` file in `server/`:
 
 ```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
-DB_NAME=your_database_name
-JWT_SECRET=your_secret_key
+MONGO_URI=mongodb://localhost:27017
+DB_NAME=volunteer_management
+JWT_SECRET=replace_with_a_long_random_string
 CLIENT_URL=http://localhost:5173
+NODE_ENV=development
 ```
 
-Run the backend server:
+Start the server:
 
 ```bash
 npm run dev
 ```
 
-### Frontend Setup
+The API runs at `http://localhost:5000`.
 
-Open a new terminal:
+### 3. Frontend setup
 
 ```bash
 cd frontend
 npm install
 ```
 
-Create a `.env` file inside the frontend directory:
+Create a `.env` file in `frontend/`:
 
 ```env
 VITE_API_URL=http://localhost:5000/api
 ```
 
-Run the frontend application:
+Start the dev server:
 
 ```bash
 npm run dev
 ```
 
----
+The app runs at `http://localhost:5173`.
 
-## Architecture
+### 4. Create your first admin
 
-```text
-Frontend (React + Vite)
-        │
-        ▼
-REST API (Express.js)
-        │
-        ▼
-MongoDB Database
+New registrations default to the `volunteer` role. To create an admin, register normally, then update that user's `role` field to `"admin"` directly in MongoDB:
+
+```js
+db.users.updateOne(
+  { email: "admin@example.com" },
+  { $set: { role: "admin" } }
+)
 ```
 
----
+## API Overview
 
-## Project Structure
+| Method | Endpoint | Access | Description |
+|---|---|---|---|
+| POST | `/api/auth/register` | Public | Register a new volunteer |
+| POST | `/api/auth/login` | Public | Log in and receive a JWT |
+| GET | `/api/auth/profile` | Authenticated | Get the logged-in user's profile |
+| PUT | `/api/auth/profile` | Authenticated | Update the logged-in user's own profile |
+| GET | `/api/dashboard/stats` | Admin | Volunteer/event summary stats |
+| GET | `/api/volunteers` | Admin | List all volunteers |
+| GET | `/api/volunteers/:id` | Admin | Get a single volunteer |
+| PUT | `/api/volunteers/:id` | Admin | Update a volunteer |
+| DELETE | `/api/volunteers/:id` | Admin | Delete a volunteer |
+| GET | `/api/events` | Authenticated | List all events |
+| GET | `/api/events/:id` | Authenticated | Get a single event |
+| POST | `/api/events` | Admin | Create an event |
+| PUT | `/api/events/:id` | Admin | Update an event |
+| DELETE | `/api/events/:id` | Admin | Delete an event |
+| POST | `/api/events/:id/join` | Authenticated | Join an event (self) |
+| POST | `/api/events/:id/leave` | Authenticated | Leave an event (self) |
+| POST | `/api/events/:id/assign` | Admin | Assign a specific volunteer to an event |
+| POST | `/api/events/:id/remove` | Admin | Remove a specific volunteer from an event |
 
-```text
-Volunteer-Management-System
-│
-├── frontend
-│   ├── src
-│   │   ├── components
-│   │   ├── context
-│   │   ├── layouts
-│   │   ├── pages
-│   │   ├── routes
-│   │   ├── services
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   │
-│   ├── package.json
-│   └── vite.config.js
-│
-├── backend
-│   ├── config
-│   ├── controllers
-│   ├── middleware
-│   ├── models
-│   ├── routes
-│   ├── utils
-│   ├── index.js
-│   └── package.json
-│
-├── screenshots
-│
-├── README.md
-└── .gitignore
-```
+## License
 
----
-
-## Authentication & Authorization
-
-The system uses JWT-based authentication and role-based authorization.
-
-### Admin
-
-* Access Dashboard
-* Manage Volunteers
-* View Volunteer Details
-* Manage Events
-* Access Analytics
-
-### Volunteer
-
-* View Events
-* Access Profile
-* Update Personal Information
-
----
-
-## Dashboard Analytics
-
-The Admin Dashboard provides:
-
-* Total Volunteers
-* Total Events
-* Upcoming Events
-* Completed Events
-* Bar Chart Visualization
-* Pie Chart Visualization
-
----
-
-## Database Models
-
-### User Model
-
-Stores:
-
-* Name
-* Email
-* Password
-* Phone Number
-* Age
-* Gender
-* Address
-* Skills
-* Availability
-* Emergency Contact Details
-* User Role
-
-### Event Model
-
-Stores:
-
-* Event Title
-* Description
-* Date
-* Location
-* Category
-* Required Volunteers
-* Assigned Volunteers
-* Event Status
-
----
-
-## API Modules
-
-### Authentication API
-
-* Register User
-* Login User
-* Get Profile
-* Update Profile
-
-### Volunteer API
-
-* Get Volunteers
-* Get Volunteer By ID
-* Update Volunteer
-* Delete Volunteer
-
-### Event API
-
-* Create Event
-* Get Events
-* Get Event By ID
-* Update Event
-* Delete Event
-
-### Dashboard API
-
-* Get Dashboard Statistics
-
----
-
-## Key Highlights
-
-* Full Stack MERN Application
-* JWT Authentication
-* Role-Based Authorization
-* Dashboard Analytics
-* Volunteer Management
-* Event Management
-* Responsive User Interface
-* RESTful API Architecture
-* MongoDB Integration
-* Secure Password Storage using Bcrypt
-
----
-
-## Future Enhancements
-
-* Event Registration & Participation Tracking
-* Volunteer Attendance Tracking
-* Event Assignment System
-* Email Notifications
-* Search & Filter Functionality
-* Event Editing Interface
-* Export Reports
-* Enhanced Dashboard Insights
-
----
-
-## Conclusion
-
-The Volunteer Management System provides a centralized solution for managing volunteers and events. Through secure authentication, role-based access control, analytics dashboards, and organized volunteer management, the platform improves operational efficiency and simplifies event coordination for organizations.
-
----
+MIT — see [LICENSE](./LICENSE).

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { FaUsers } from "react-icons/fa";
 import DashboardLayout from "../layouts/DashboardLayout";
 import api from "../services/api";
 
@@ -47,21 +48,38 @@ function Volunteers() {
 
   return (
     <DashboardLayout>
-      <h1 className="text-3xl font-bold mb-6">
-        Volunteers
-      </h1>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+          Volunteers
+        </h1>
+        <p className="text-sm text-slate-500 mt-1">
+          {loading ? "Loading..." : `${volunteers.length} registered volunteer${volunteers.length === 1 ? "" : "s"}`}
+        </p>
+      </div>
 
       {loading ? (
-        <p>Loading volunteers...</p>
+        <div className="bg-white rounded-xl border border-slate-200 p-10 text-center text-sm text-slate-500">
+          Loading volunteers...
+        </div>
+      ) : volunteers.length === 0 ? (
+        <div className="bg-white rounded-xl border border-slate-200 p-12 text-center">
+          <FaUsers className="mx-auto text-3xl text-slate-300 mb-3" />
+          <p className="text-sm font-medium text-slate-700">
+            No volunteers yet
+          </p>
+          <p className="text-sm text-slate-500 mt-1">
+            Registered volunteers will appear here.
+          </p>
+        </div>
       ) : (
-        <div className="bg-white rounded-lg shadow overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-slate-900 text-white">
-              <tr>
-                <th className="p-3 text-left">Name</th>
-                <th className="p-3 text-left">Email</th>
-                <th className="p-3 text-left">Phone</th>
-                <th className="p-3 text-left">Actions</th>
+        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="px-5 py-3 text-left font-semibold text-slate-600">Name</th>
+                <th className="px-5 py-3 text-left font-semibold text-slate-600">Email</th>
+                <th className="px-5 py-3 text-left font-semibold text-slate-600">Phone</th>
+                <th className="px-5 py-3 text-left font-semibold text-slate-600">Actions</th>
               </tr>
             </thead>
 
@@ -69,38 +87,40 @@ function Volunteers() {
               {volunteers.map((volunteer) => (
                 <tr
                   key={volunteer._id}
-                  className="border-b"
+                  className="border-b border-slate-100 last:border-0 hover:bg-slate-50/60 transition-colors"
                 >
-                  <td className="p-3">
+                  <td className="px-5 py-3.5 font-medium text-slate-900">
                     {volunteer.name}
                   </td>
 
-                  <td className="p-3">
+                  <td className="px-5 py-3.5 text-slate-600">
                     {volunteer.email}
                   </td>
 
-                  <td className="p-3">
+                  <td className="px-5 py-3.5 text-slate-600">
                     {volunteer.phone}
                   </td>
 
-                  <td className="p-3 flex gap-2">
-                    <Link
-                      to={`/volunteers/${volunteer._id}`}
-                      className="bg-blue-500 text-white px-3 py-1 rounded"
-                    >
-                      View
-                    </Link>
+                  <td className="px-5 py-3.5">
+                    <div className="flex gap-2">
+                      <Link
+                        to={`/volunteers/${volunteer._id}`}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors"
+                      >
+                        View
+                      </Link>
 
-                    <button
-                      onClick={() =>
-                        deleteVolunteer(
-                          volunteer._id
-                        )
-                      }
-                      className="bg-red-500 text-white px-3 py-1 rounded"
-                    >
-                      Delete
-                    </button>
+                      <button
+                        onClick={() =>
+                          deleteVolunteer(
+                            volunteer._id
+                          )
+                        }
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

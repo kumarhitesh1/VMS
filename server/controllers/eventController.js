@@ -68,12 +68,15 @@ const deleteEvent = async (req, res) => {
   });
 };
 
-// A logged-in volunteer signs themselves up for an event.
 const joinEvent = async (req, res) => {
   const event = await Event.findById(req.params.id);
 
   if (!event) {
     throw new AppError("Event not found", 404);
+  }
+
+  if (event.status === "Completed" || event.date < new Date()) {
+    throw new AppError("This event has already passed", 400);
   }
 
   const alreadyJoined = event.volunteers.some(
@@ -98,7 +101,6 @@ const joinEvent = async (req, res) => {
   });
 };
 
-// A logged-in volunteer removes themselves from an event.
 const leaveEvent = async (req, res) => {
   const event = await Event.findById(req.params.id);
 
@@ -119,13 +121,16 @@ const leaveEvent = async (req, res) => {
   });
 };
 
-// Admin manually assigns a specific volunteer to an event.
 const assignVolunteer = async (req, res) => {
   const { volunteerId } = req.body;
 
   const event = await Event.findById(req.params.id);
   if (!event) {
     throw new AppError("Event not found", 404);
+  }
+
+  if (event.status === "Completed" || event.date < new Date()) {
+    throw new AppError("This event has already passed", 400);
   }
 
   const volunteer = await User.findOne({
@@ -143,6 +148,10 @@ const assignVolunteer = async (req, res) => {
     throw new AppError("Volunteer is already assigned to this event", 400);
   }
 
+  if (event.volunteers.length >= event.requiredVolunteers) {
+    throw new AppError("This event is already full", 400);
+  }
+
   event.volunteers.push(volunteerId);
   await event.save();
 
@@ -152,7 +161,6 @@ const assignVolunteer = async (req, res) => {
   });
 };
 
-// Admin removes a volunteer from an event.
 const removeVolunteer = async (req, res) => {
   const { volunteerId } = req.body;
 

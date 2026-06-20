@@ -5,6 +5,10 @@ const {
   getEventById,
   updateEvent,
   deleteEvent,
+  joinEvent,
+  leaveEvent,
+  assignVolunteer,
+  removeVolunteer,
 } = require("../controllers/eventController");
 
 const authMiddleware = require("../middleware/authMiddleware");
@@ -43,6 +47,32 @@ router.delete(
   authMiddleware,
   roleMiddleware("admin"),
   deleteEvent
+);
+
+router.post(
+  "/:id/join",
+  authMiddleware,
+  joinEvent
+);
+
+router.post(
+  "/:id/leave",
+  authMiddleware,
+  leaveEvent
+);
+
+router.post(
+  "/:id/assign",
+  authMiddleware,
+  roleMiddleware("admin"),
+  assignVolunteer
+);
+
+router.post(
+  "/:id/remove",
+  authMiddleware,
+  roleMiddleware("admin"),
+  removeVolunteer
 );
 
 module.exports = router;
